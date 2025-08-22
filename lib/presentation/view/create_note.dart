@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/core/widgets/note_text_filed.dart';
+import 'package:notes_app/core/widgets/title_text_filed.dart';
 
 class CreateNote extends StatelessWidget {
   final titleController = TextEditingController();
@@ -14,41 +16,18 @@ class CreateNote extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back),
-                ),
+              BackButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
               const SizedBox(height: 15.0),
-              TextFormField(
-                controller: titleController,
-                style: TextStyle(fontSize: 25.0),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Title',
-                  hintStyle: TextStyle(fontSize: 25.0, color: Colors.grey),
-                ),
-              ),
+              TitleTextFiled(controller: titleController),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Divider(),
               ),
-              Expanded(
-                child: TextFormField(
-                  controller: noteController,
-                  style: TextStyle(fontSize: 25.0),
-                  minLines: 1,
-                  maxLines: 50,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Start typing',
-                    hintStyle: TextStyle(fontSize: 25.0, color: Colors.grey),
-                  ),
-                ),
-              ),
+              NoteTextFiled(controller: noteController),
             ],
           ),
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/presentation/view/create_note.dart';
+import 'package:notes_app/core/widgets/add_note_button.dart';
+import 'package:notes_app/core/widgets/note_item.dart';
+import '../../core/widgets/screen_title.dart';
 
 class NotesScreen extends StatelessWidget {
   const NotesScreen({super.key});
@@ -8,39 +10,14 @@ class NotesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'My Notes',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Expanded( 
-              child: ListView.separated(
-                itemBuilder: (context, index) => ListTile(
-                  title: Text("Note $index"),
-                  subtitle: Text("This is the content of note $index"),
-                  leading: Icon(Icons.note),
-                ),
-                separatorBuilder: (context,index) => const SizedBox(height: 20.0),
-                itemCount: 20,
-              ),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            spacing: 16.0,
+            children: [ScreenTitle(), NoteItem()]),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        elevation: 0.0,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  CreateNote()),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: AddNoteButton(),
     );
   }
 }
