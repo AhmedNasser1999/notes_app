@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/core/config/di.dart';
+import 'package:notes_app/presentation/view/notes_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,10 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      debugShowCheckedModeBanner: false,
+     home: NotesScreen(),
     );
   }
 }

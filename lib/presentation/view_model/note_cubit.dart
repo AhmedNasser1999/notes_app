@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:notes_app/domain/entities/note_entity.dart';
@@ -15,6 +16,8 @@ class NoteCubit extends Cubit<NoteState> {
   final GetAllNotes _fetchAllNotesUseCase;
   final GetNoteById _fetchNoteByIdUseCase;
   final UpdateNote _updateNoteUseCase;
+  final titleController = TextEditingController();
+  final noteController = TextEditingController();
 
   NoteCubit(
     this._addNoteUseCase,
