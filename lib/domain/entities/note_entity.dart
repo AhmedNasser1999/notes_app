@@ -1,15 +1,7 @@
 class NoteEntity {
-  final String id;
-  final String title;
-  final String content;
-  final DateTime createdAt; 
-  final DateTime? updatedAt;
-
-  const NoteEntity({
-    required this.id,
-    required this.title,
-    required this.content,
-    required this.createdAt, 
-    this.updatedAt,
-  });
+  final String? id;
+  final String? title;
+  final String? content;
+  final String? createdAt;
+  const NoteEntity({this.title, this.content, this.id, this.createdAt});
 }

@@ -21,7 +21,9 @@ class NoteDataSourchImpl implements NoteDataSource {
 
   @override
   Future<List<NoteModel>> getAllNotes() async {
-    return box.values.toList();
+    final notes = box.values.toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return notes;
   }
 
   @override
@@ -32,5 +34,10 @@ class NoteDataSourchImpl implements NoteDataSource {
   @override
   Future<void> updateNote(NoteModel note) async {
     await box.put(note.id, note);
+  }
+
+  @override
+  Future<void> deleteAllNotes() async {
+    await box.clear();
   }
 }

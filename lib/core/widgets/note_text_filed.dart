@@ -15,7 +15,7 @@ class NoteTextFiled extends StatelessWidget {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Start typing',
-          hintStyle: TextStyle(fontSize: 25.0, color: Colors.grey),
+          hintStyle: TextStyle(fontSize: 20.0, color: Colors.grey),
         ),
       ),
     );

@@ -1,33 +1,61 @@
 import 'package:flutter/material.dart';
 
 class NoteWidget extends StatelessWidget {
-  const NoteWidget({super.key});
+  final VoidCallback onTap;
+  final String title;
+  final String noteContent;
+  // final String createdAt;
+  const NoteWidget({
+    super.key,
+    required this.onTap,
+    required this.title,
+    required this.noteContent,
+    // required this.createdAt,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(16.0),
-
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
-          color: Colors.grey[300],
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Theme.of(context)
+                    .colorScheme
+                    .surface // No opacity in dark theme
+              : Theme.of(
+                  context,
+                ).colorScheme.surface, // Keep opacity in light theme
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16.0,
           children: [
             Text(
-              'title',
-              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+              title,
+              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            const SizedBox(height: 16.0),
             Text(
-              'Tip: If you want VS Code to start with a specific theme every time, just set it once — VS Code remembers your last selected theme by default.',
+              noteContent,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 18.0),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontSize: 20.0),
             ),
+            // Text(
+            //   createdAt,
+            //   maxLines: 2,
+            //   overflow: TextOverflow.ellipsis,
+            //   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            //         fontSize: 15.0,
+            //       ),
+            // ),
           ],
         ),
       ),

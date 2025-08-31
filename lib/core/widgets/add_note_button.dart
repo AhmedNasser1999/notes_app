@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/presentation/view/create_note.dart';
 
 class AddNoteButton extends StatelessWidget {
-  const AddNoteButton({super.key});
+  final IconData icon;
+  final VoidCallback onPressed;
+  const AddNoteButton({super.key, required this.onPressed, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -10,17 +11,11 @@ class AddNoteButton extends StatelessWidget {
       width: 70,
       height: 70,
       child: FloatingActionButton(
-          
-        backgroundColor: Colors.blueAccent,
-          elevation: 0.0,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreateNote()),
-            );
-          },
-          child: const Icon(Icons.add,color: Colors.white,),
-        ),
+        backgroundColor: Colors.blue[800],
+        elevation: 0.0,
+        onPressed: onPressed,
+        child: Icon(icon, color: Colors.white),
+      ),
     );
   }
 }

@@ -26,11 +26,10 @@ class NoteRepoImpl implements NoteRepo {
       final entityList = noteList
           .map(
             (note) => NoteEntity(
-              id: note.id,
               title: note.title,
               content: note.content,
-              createdAt: note.createdAt,
-              updatedAt: note.updatedAt,
+              // createdAt: note.createdAt,
+              // updatedAt: note.updatedAt,
             ),
           )
           .toList();
@@ -45,11 +44,11 @@ class NoteRepoImpl implements NoteRepo {
   @override
   Future<void> updateNote(NoteEntity noteEntity) async {
     final noteModel = NoteModel(
-      id: noteEntity.id,
-      title: noteEntity.title,
-      content: noteEntity.content,
-      createdAt: noteEntity.createdAt,
-      updatedAt: noteEntity.updatedAt,
+      title: noteEntity.title!,
+      content: noteEntity.content!,
+      id: noteEntity.id!,
+      createdAt: noteEntity.createdAt!,
+      // updatedAt: noteEntity.updatedAt,
     );
     await noteDataSourchImpl.updateNote(noteModel);
   }
@@ -69,13 +68,18 @@ class NoteRepoImpl implements NoteRepo {
   @override
   Future<void> addNote(NoteEntity noteEntity) async {
     final noteModel = NoteModel(
-      id: noteEntity.id,
-      title: noteEntity.title,
-      content: noteEntity.content,
-      createdAt: noteEntity.createdAt,
-      updatedAt: noteEntity.updatedAt,
+      title: noteEntity.title!,
+      content: noteEntity.content!,
+      id: noteEntity.id!,
+      createdAt: noteEntity.createdAt!,
+      // updatedAt: noteEntity.updatedAt,
     );
 
     await noteDataSourchImpl.addNote(noteModel);
+  }
+
+  @override
+  Future<void> deleteAllNotes() async {
+    await noteDataSourchImpl.deleteAllNotes();
   }
 }

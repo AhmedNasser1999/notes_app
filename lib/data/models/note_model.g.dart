@@ -20,15 +20,14 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       id: fields[0] as String,
       title: fields[1] as String,
       content: fields[2] as String,
-      createdAt: fields[3] as DateTime,
-      updatedAt: fields[4] as DateTime?,
+      createdAt: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, NoteModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -36,9 +35,7 @@ class NoteModelAdapter extends TypeAdapter<NoteModel> {
       ..writeByte(2)
       ..write(obj.content)
       ..writeByte(3)
-      ..write(obj.createdAt)
-      ..writeByte(4)
-      ..write(obj.updatedAt);
+      ..write(obj.createdAt);
   }
 
   @override
@@ -60,16 +57,12 @@ NoteModel _$NoteModelFromJson(Map<String, dynamic> json) => NoteModel(
       id: json['id'] as String,
       title: json['title'] as String,
       content: json['content'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] as String,
     );
 
 Map<String, dynamic> _$NoteModelToJson(NoteModel instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'content': instance.content,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'createdAt': instance.createdAt,
     };

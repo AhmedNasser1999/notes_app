@@ -12,4 +12,6 @@ abstract class NoteRepo {
   Future<Either<Failure, List<NoteEntity>>> getAllNotes();
 
   Future<void> deleteNoteById(String id);
+
+  Future<void> deleteAllNotes();
 }

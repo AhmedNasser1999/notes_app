@@ -10,4 +10,6 @@ abstract class NoteDataSource {
   Future<NoteModel?> getNoteById(String id);
 
   Future<List<NoteModel>> getAllNotes();
+
+  Future<void> deleteAllNotes();
 }

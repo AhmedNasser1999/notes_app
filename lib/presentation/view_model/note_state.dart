@@ -4,16 +4,34 @@ abstract class NoteState {}
 
 class NoteInitial extends NoteState {}
 
-class NoteLoading extends NoteState {}
+class NoteEmpty extends NoteState {}
 
-class NoteLoaded extends NoteState {
+class AddNoteState extends NoteState {}
+
+class RemoveNoteState extends NoteState {}
+
+class RemoveAllNotesState extends NoteState {}
+
+class EditNoteState extends NoteState {}
+
+class GetAllNotesState extends NoteState {
   final List<NoteEntity> notes;
 
-  NoteLoaded(this.notes);
+  GetAllNotesState({required this.notes});
+}
+
+class GetNoteState extends NoteState {
+  final NoteEntity note;
+  GetNoteState({required this.note});
 }
 
 class NoteError extends NoteState {
   final String message;
 
-  NoteError(this.message);
+  NoteError({required this.message});
+}
+
+class ChangeTheme extends NoteState {
+  final bool isDark;
+  ChangeTheme({required this.isDark});
 }
