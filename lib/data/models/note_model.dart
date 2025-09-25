@@ -17,7 +17,7 @@ class NoteModel extends NoteEntity {
   @HiveField(2)
   @override
   final String content;
-  
+
   @HiveField(3)
   @override
   final String createdAt;
@@ -27,7 +27,7 @@ class NoteModel extends NoteEntity {
     required this.title,
     required this.content,
     required this.createdAt,
-  }) : super(title: title, content: content, createdAt: createdAt);
+  }) : super(title: title, content: content, createdAt: createdAt, id: id);
 
   factory NoteModel.fromJson(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);

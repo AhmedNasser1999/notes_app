@@ -12,7 +12,7 @@ class RemoveNoteState extends NoteState {}
 
 class RemoveAllNotesState extends NoteState {}
 
-class EditNoteState extends NoteState {}
+class UpdateNoteState extends NoteState {}
 
 class GetAllNotesState extends NoteState {
   final List<NoteEntity> notes;
@@ -35,3 +35,5 @@ class ChangeTheme extends NoteState {
   final bool isDark;
   ChangeTheme({required this.isDark});
 }
+
+class ClearControllers extends NoteState {}

@@ -1,17 +1,19 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:notes_app/core/error/failure.dart';
 import 'package:notes_app/data/data_source/theme_data_source.dart';
 import 'package:notes_app/domain/entities/note_entity.dart';
 import 'package:notes_app/domain/use_cases/add_note.dart';
 import 'package:notes_app/domain/use_cases/delete_all_notes.dart';
 import 'package:notes_app/domain/use_cases/delete_note_by_id.dart';
 import 'package:notes_app/domain/use_cases/get_all_notes.dart';
-import 'package:notes_app/presentation/view/create_note_screen.dart';
-import 'package:uuid/uuid.dart';
-import '../../domain/use_cases/get_note_by_id.dart';
-import '../../domain/use_cases/update_note.dart';
+import 'package:notes_app/domain/use_cases/get_note_by_id.dart';
+import 'package:notes_app/domain/use_cases/update_note.dart';
+import 'package:uuid/uuid.dart' show Uuid;
 import 'note_state.dart';
+import '../view/create_note_screen.dart';
 
 @injectable
 class NoteCubit extends Cubit<NoteState> {
@@ -23,8 +25,8 @@ class NoteCubit extends Cubit<NoteState> {
   final DeleteAllNotes _deleteAllNotesUseCase;
 
   final id = Uuid();
-  final titleController = TextEditingController();
-  final noteController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
 
   bool isDark = false;
 
@@ -54,41 +56,63 @@ class NoteCubit extends Cubit<NoteState> {
     );
   }
 
-  /// Create a new note if title or content is not empty
-  Future<bool> createNote() async {
+  /// Create a new note and return its ID if created
+  Future<String?> createNote() async {
     final title = titleController.text.trim();
     final content = noteController.text.trim();
 
-    if (title.isEmpty && content.isEmpty) {
-      return false;
-    }
+    if (title.isEmpty && content.isEmpty) return null;
 
-    await _addNoteUseCase.executeAddNote(
-      NoteEntity(
-        title: title,
-        content: content,
-        id: id.v4(),
-        createdAt: DateTime.now().toString(),
-      ),
+    final generatedId = id.v4();
+    final note = NoteEntity(
+      id: generatedId,
+      title: title,
+      content: content,
+      createdAt: DateTime.now().toString(),
     );
-    emit(AddNoteState());
 
-    return true;
+    await _addNoteUseCase.executeAddNote(note);
+    emit(AddNoteState());
+    return generatedId;
   }
 
-  /// Update existing note (must already have an ID)
-  Future<void> modifyNote() async {
+  /// Update an existing note
+  Future<void> updateNote(String noteId) async {
     final title = titleController.text.trim();
     final content = noteController.text.trim();
 
-    if (title.isEmpty && content.isEmpty) {
-      return;
-    }
+    if (title.isEmpty && content.isEmpty) return;
 
-    await _updateNoteUseCase.executeUpdateNote(
-      NoteEntity(title: title, content: content),
+    final note = NoteEntity(
+      id: noteId,
+      title: title,
+      content: content,
+      createdAt: DateTime.now().toString(),
     );
-    emit(EditNoteState());
+
+    await _updateNoteUseCase.executeUpdateNote(note);
+    emit(UpdateNoteState());
+  }
+
+  /// Load a note and navigate to edit screen
+  Future<void> modifyNote(String id, BuildContext context) async {
+    final result = await fetchNoteById(id);
+
+    result.fold((error) => emit(NoteError(message: error.errorMessage)), (
+      noteEntity,
+    ) {
+      if (noteEntity == null) return;
+
+      titleController.text = noteEntity.title;
+      noteController.text = noteEntity.content;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateNoteScreen(noteId: noteEntity.id),
+        ),
+      );
+    });
   }
 
   /// Delete a note by its ID
@@ -97,25 +121,8 @@ class NoteCubit extends Cubit<NoteState> {
     emit(RemoveNoteState());
   }
 
-  /// Fetch a single note by ID
-  Future<void> fetchNoteById(String id) async {
-    final noteResponse = await _fetchNoteByIdUseCase.executeGetNoteById(id);
-
-    noteResponse.fold(
-      (error) => emit(NoteError(message: error.errorMessage)),
-      (note) => emit(GetNoteState(note: note!)),
-    );
-  }
-
-  /// Button action: Save note, refresh list, clear fields, and go back
-  Future<void> backToNotesScreenButton(BuildContext context) async {
-    final noteCreated = await createNote();
-
-    if (noteCreated) {
-      await fetchAllNotes();
-    }
-    clearControllers();
-    Navigator.pop(context);
+  Future<Either<Failure, NoteEntity?>> fetchNoteById(String id) async {
+    return await _fetchNoteByIdUseCase.executeGetNoteById(id);
   }
 
   /// Delete all notes in the database
@@ -124,18 +131,12 @@ class NoteCubit extends Cubit<NoteState> {
     emit(NoteEmpty());
   }
 
-  /// Helper method to check if user entered something
-  bool get hasNoteContent {
-    final title = titleController.text.trim();
-    final content = noteController.text.trim();
-    return title.isNotEmpty || content.isNotEmpty;
-  }
-
   /// Navigate to Add Note screen
   void addNoteButton(BuildContext context) {
+    clearControllers();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CreateNoteScreen()),
+      MaterialPageRoute(builder: (context) => const CreateNoteScreen()),
     );
   }
 
@@ -144,9 +145,6 @@ class NoteCubit extends Cubit<NoteState> {
     titleController.clear();
     noteController.clear();
   }
-
-  /// Navigate to Edit Note screen (future use)
-  void editNoteButton() {}
 
   ///Change Theme
   void changeTheme() async {

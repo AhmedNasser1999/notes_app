@@ -13,7 +13,7 @@ import 'package:hive/hive.dart' as _i979;
 import 'package:hive_flutter/hive_flutter.dart' as _i986;
 import 'package:injectable/injectable.dart' as _i526;
 
-import '../../data/data_source/note_data_sourch_impl.dart' as _i666;
+import '../../data/data_source/note_data_source_impl.dart' as _i383;
 import '../../data/models/note_model.dart' as _i1073;
 import '../../data/repository/note_repo_impl.dart' as _i439;
 import '../../domain/use_cases/add_note.dart' as _i367;
@@ -41,10 +41,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => hiveModule.noteBox,
       preResolve: true,
     );
-    gh.lazySingleton<_i666.NoteDataSourchImpl>(
-        () => _i666.NoteDataSourchImpl(gh<_i979.Box<_i1073.NoteModel>>()));
+    gh.lazySingleton<_i383.NoteDataSourceImpl>(
+        () => _i383.NoteDataSourceImpl(gh<_i979.Box<_i1073.NoteModel>>()));
     gh.lazySingleton<_i439.NoteRepoImpl>(
-        () => _i439.NoteRepoImpl(gh<_i666.NoteDataSourchImpl>()));
+        () => _i439.NoteRepoImpl(gh<_i383.NoteDataSourceImpl>()));
     gh.lazySingleton<_i132.DeleteNoteById>(
         () => _i132.DeleteNoteById(gh<_i439.NoteRepoImpl>()));
     gh.lazySingleton<_i778.UpdateNote>(

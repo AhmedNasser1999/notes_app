@@ -18,7 +18,7 @@ class NotesBody extends StatelessWidget {
               return const Center(child: Text('No notes yet.'));
             } else if (state is GetAllNotesState) {
               final notes = state.notes;
-              return NotesList(onTap: () {}, noteEntity: notes);
+              return NotesList(noteEntityList: notes);
             } else if (state is NoteError) {
               final message = state.message;
               return Center(child: Text(message));

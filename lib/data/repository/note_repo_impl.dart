@@ -1,34 +1,35 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:notes_app/core/error/failure.dart';
-import 'package:notes_app/data/data_source/note_data_sourch_impl.dart';
+import 'package:notes_app/data/data_source/note_data_source_impl.dart';
 import 'package:notes_app/data/models/note_model.dart';
 import 'package:notes_app/domain/entities/note_entity.dart';
 import 'package:notes_app/domain/repository/note_repo.dart';
 
 @lazySingleton
 class NoteRepoImpl implements NoteRepo {
-  NoteDataSourchImpl noteDataSourchImpl;
+  NoteDataSourceImpl noteDataSourceImpl;
 
-  NoteRepoImpl(this.noteDataSourchImpl);
+  NoteRepoImpl(this.noteDataSourceImpl);
   //______________________________________________________________
 
   @override
   Future<void> deleteNoteById(String id) async {
-    await noteDataSourchImpl.deleteNoteById(id);
+    await noteDataSourceImpl.deleteNoteById(id);
   }
 
   //______________________________________________________________
   @override
   Future<Either<Failure, List<NoteEntity>>> getAllNotes() async {
     try {
-      final noteList = await noteDataSourchImpl.getAllNotes();
+      final noteList = await noteDataSourceImpl.getAllNotes();
       final entityList = noteList
           .map(
             (note) => NoteEntity(
               title: note.title,
               content: note.content,
-              // createdAt: note.createdAt,
+              id: note.id,
+              createdAt: note.createdAt,
               // updatedAt: note.updatedAt,
             ),
           )
@@ -44,20 +45,20 @@ class NoteRepoImpl implements NoteRepo {
   @override
   Future<void> updateNote(NoteEntity noteEntity) async {
     final noteModel = NoteModel(
-      title: noteEntity.title!,
-      content: noteEntity.content!,
-      id: noteEntity.id!,
-      createdAt: noteEntity.createdAt!,
+      title: noteEntity.title,
+      content: noteEntity.content,
+      id: noteEntity.id,
+      createdAt: noteEntity.createdAt,
       // updatedAt: noteEntity.updatedAt,
     );
-    await noteDataSourchImpl.updateNote(noteModel);
+    await noteDataSourceImpl.updateNote(noteModel);
   }
   //______________________________________________________________
 
   @override
   Future<Either<Failure, NoteEntity?>> getNoteById(String id) async {
     try {
-      final noteEntity = await noteDataSourchImpl.getNoteById(id);
+      final noteEntity = await noteDataSourceImpl.getNoteById(id);
       return Right(noteEntity);
     } catch (e) {
       return Left(LocalFailure(errorMessage: e.toString()));
@@ -68,18 +69,18 @@ class NoteRepoImpl implements NoteRepo {
   @override
   Future<void> addNote(NoteEntity noteEntity) async {
     final noteModel = NoteModel(
-      title: noteEntity.title!,
-      content: noteEntity.content!,
-      id: noteEntity.id!,
-      createdAt: noteEntity.createdAt!,
+      title: noteEntity.title,
+      content: noteEntity.content,
+      id: noteEntity.id,
+      createdAt: noteEntity.createdAt,
       // updatedAt: noteEntity.updatedAt,
     );
 
-    await noteDataSourchImpl.addNote(noteModel);
+    await noteDataSourceImpl.addNote(noteModel);
   }
 
   @override
   Future<void> deleteAllNotes() async {
-    await noteDataSourchImpl.deleteAllNotes();
+    await noteDataSourceImpl.deleteAllNotes();
   }
 }
