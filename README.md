@@ -1,6 +1,6 @@
 # Notes App
 
-[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/AhmedNasser1999/notes_app)
+
 
 A simple, offline-first notes application built with Flutter. It allows users to create, manage, and store notes locally on their device.
 
