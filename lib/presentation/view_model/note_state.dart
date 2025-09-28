@@ -14,12 +14,6 @@ class RemoveAllNotesState extends NoteState {}
 
 class UpdateNoteState extends NoteState {}
 
-class GetAllNotesState extends NoteState {
-  final List<NoteEntity> notes;
-
-  GetAllNotesState({required this.notes});
-}
-
 class GetNoteState extends NoteState {
   final NoteEntity note;
   GetNoteState({required this.note});
@@ -37,3 +31,24 @@ class ChangeTheme extends NoteState {
 }
 
 class ClearControllers extends NoteState {}
+
+// Missing states that are used in NotesBody
+class NoteLoading extends NoteState {}
+
+class NoteSuccess extends NoteState {
+  final List<NoteEntity> notes;
+  
+  NoteSuccess({required this.notes});
+}
+
+class NoteFailure extends NoteState {
+  final String message;
+  
+  NoteFailure({required this.message});
+}
+
+class SortNoteState extends NoteState {
+  final List<NoteEntity> notes;
+  
+  SortNoteState({required this.notes});
+}

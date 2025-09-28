@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes_app/core/widgets/category_editor.dart';
 import 'package:notes_app/core/widgets/note_text_filed.dart';
 import 'package:notes_app/core/widgets/title_text_filed.dart';
 import 'package:notes_app/presentation/view_model/note_cubit.dart';
@@ -15,19 +16,34 @@ class CreateNoteScreen extends StatefulWidget {
 }
 
 class _CreateNoteScreenState extends State<CreateNoteScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   String? _currentNoteId;
   bool _isSaving = false;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _currentNoteId = widget.noteId;
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+
+    _animationController.forward();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -66,41 +82,88 @@ class _CreateNoteScreenState extends State<CreateNoteScreen>
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<NoteCubit>();
+    final theme = Theme.of(context);
 
     return BlocBuilder<NoteCubit, NoteState>(
       builder: (context, state) => WillPopScope(
         onWillPop: () async {
           await _saveIfNeeded();
+          // Run reverse animation before popping
+          await _animationController.reverse();
+          // Always reload notes when returning to main screen
+          await cubit.fetchAllNotes();
           return true;
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text(widget.noteId == null ? 'Create Note' : 'Edit Note'),
+            title: Text(
+              widget.noteId == null ? 'Create Note' : 'Edit Note',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            elevation: 0,
             actions: [
               IconButton(
-                icon: const Icon(Icons.check),
+                icon: Icon(Icons.check, color: theme.colorScheme.primary),
                 onPressed: () async {
                   await _saveIfNeeded();
+                  await _animationController.reverse();
+                  // Always reload notes when returning to main screen
+                  await cubit.fetchAllNotes();
                   if (mounted) Navigator.pop(context);
                 },
               ),
             ],
           ),
           body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 15.0),
-                  TitleTextFiled(controller: cubit.titleController),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.0),
-                    child: Divider(),
-                  ),
-                  NoteTextFiled(controller: cubit.noteController),
-                ],
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 8.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TitleTextFiled(controller: cubit.titleController),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 0.0),
+                      child: Divider(
+                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        thickness: 1.0,
+                      ),
+                    ),
+                    NoteTextFiled(controller: cubit.noteController),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Divider(
+                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        thickness: 1.0,
+                      ),
+                    ),
+                    CategoryEditor(
+                      initialCategories: cubit.currentNoteCategories,
+                      onCategoriesChanged: cubit.updateCategories,
+                    ),
+                  ],
+                ),
               ),
+            ),
+          ),
+          floatingActionButton: ScaleTransition(
+            scale: _fadeAnimation,
+            child: FloatingActionButton(
+              onPressed: () async {
+                await _saveIfNeeded();
+                await _animationController.reverse();
+                // Always reload notes when returning to main screen
+                await cubit.fetchAllNotes();
+                if (mounted) Navigator.pop(context);
+              },
+              tooltip: 'Save Note',
+              child: const Icon(Icons.save),
             ),
           ),
         ),

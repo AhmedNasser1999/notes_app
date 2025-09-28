@@ -7,7 +7,7 @@ class DeleteAllNotes {
 
   DeleteAllNotes(this.noteRepoImpl);
 
-  Future<void> executeDeleteAllNote()async {
+  Future<void> executeDeleteAllNotes()async {
    await noteRepoImpl.deleteAllNotes();
   }
 }

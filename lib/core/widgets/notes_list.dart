@@ -11,20 +11,49 @@ class NotesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (context, index) => NoteWidget(
-        onTap: () {
-          context.read<NoteCubit>().modifyNote(
-            noteEntityList[index].id,
-            context,
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.8,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: noteEntityList.length,
+        itemBuilder: (context, index) {
+          // Add staggered animation effect
+          return AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            opacity: 1.0,
+            curve: Curves.easeInOut,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 1.0, end: 0.0),
+              duration: Duration(milliseconds: 300 + (index * 50)),
+              builder: (context, value, child) {
+                return Transform.translate(
+                  offset: Offset(0, value * 20),
+                  child: child,
+                );
+              },
+              child: NoteWidget(
+                onTap: () {
+                  context.read<NoteCubit>().modifyNote(
+                    noteEntityList[index].id,
+                    context,
+                  );
+                },
+                onDelete: () {
+                  context.read<NoteCubit>().deleteNoteById(noteEntityList[index].id);
+                },
+                title: noteEntityList[index].title,
+                noteContent: noteEntityList[index].content,
+                categories: noteEntityList[index].categories,
+              ),
+            ),
           );
         },
-        title: noteEntityList[index].title,
-        noteContent: noteEntityList[index].content,
-        // createdAt: noteEntity[index].createdAt!,
       ),
-      separatorBuilder: (context, index) => SizedBox(height: 15.0),
-      itemCount: noteEntityList.length,
     );
   }
 }

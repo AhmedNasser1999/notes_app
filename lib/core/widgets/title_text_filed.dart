@@ -7,22 +7,33 @@ class TitleTextFiled extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       controller: controller,
-      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-            fontSize: 25.0,
-            fontWeight: FontWeight.bold,
-          ),
+      style: theme.textTheme.displayLarge?.copyWith(
+        fontSize: 28.0,
+        fontWeight: FontWeight.bold,
+        color: theme.colorScheme.onSurface,
+      ),
       decoration: InputDecoration(
         border: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        disabledBorder: InputBorder.none,
+        focusedErrorBorder: InputBorder.none,
         hintText: 'Title',
-        hintStyle: Theme.of(context).textTheme.displayLarge?.copyWith(
-              fontSize: 25.0,
-              fontWeight: FontWeight.bold,
-              // ignore: deprecated_member_use
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-            ),
+        hintStyle: theme.textTheme.displayLarge?.copyWith(
+          fontSize: 28.0,
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onSurface.withOpacity(0.5),
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
+        isDense: true, // Reduces the vertical padding
       ),
+      textCapitalization: TextCapitalization.sentences,
+      maxLines: 2,
     );
   }
 }

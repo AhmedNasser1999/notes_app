@@ -12,13 +12,28 @@ class NotesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final noteCubit = context.read<NoteCubit>();
+    final isTablet = MediaQuery.of(context).size.width > 600;
+    
     return Scaffold(
-      drawer: AppDrawer(
+      drawer: isTablet ? null : AppDrawer(
         changeTheme: noteCubit.changeTheme,
-        deleteAllNotes: noteCubit.deleteAllnotes,
+        deleteAllNotes: noteCubit.deleteAllNotes,
       ),
       appBar: NotesAppBar(),
-      body: const NotesBody(),
+      body: isTablet 
+        ? Row(
+            children: [
+              SizedBox(
+                width: 280,
+                child: AppDrawer(
+                  changeTheme: noteCubit.changeTheme,
+                  deleteAllNotes: noteCubit.deleteAllNotes,
+                ),
+              ),
+              const Expanded(child: NotesBody()),
+            ],
+          )
+        : const NotesBody(),
       floatingActionButton: AddNoteButton(
         icon: Icons.add,
         onPressed: () => context.read<NoteCubit>().addNoteButton(context),

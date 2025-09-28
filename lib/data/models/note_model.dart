@@ -21,13 +21,18 @@ class NoteModel extends NoteEntity {
   @HiveField(3)
   @override
   final String createdAt;
+  
+  @HiveField(4)
+  @override
+  final List<String> categories;
 
   NoteModel({
     required this.id,
     required this.title,
     required this.content,
     required this.createdAt,
-  }) : super(title: title, content: content, createdAt: createdAt, id: id);
+    this.categories = const [],
+  }) : super(title: title, content: content, createdAt: createdAt, id: id, categories: categories);
 
   factory NoteModel.fromJson(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);

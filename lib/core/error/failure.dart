@@ -4,6 +4,8 @@ abstract class Failure {
   final String errorMessage;
 
   Failure({required this.errorMessage});
+
+  String get message => errorMessage;
 }
 
 /// Represents a failure when working with local storage (Hive, SQLite, etc.)
