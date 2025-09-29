@@ -118,17 +118,24 @@ A modern, feature-rich note-taking application built with Flutter that allows us
 
 ## Screenshots
 
-| Light Theme | Dark Theme | Create Note |
-|---|---|---|
-| ![Light Theme](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202025-09-28%20at%2023.02.42.png) | ![Dark Theme](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202025-09-28%20at%2023.02.59.png) | ![Create Note](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202025-09-28%20at%2023.03.12.png) |
+### Main Interface
 
-| Edit Note | Search | Categories |
+| Light Theme - Notes List | Dark Theme - Notes List | Create New Note |
 |---|---|---|
-| ![Edit Note](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202025-09-28%20at%2023.03.21.png) | ![Search](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202025-09-28%20at%2023.03.26.png) | ![Categories](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202025-09-28%20at%2023.05.15.png) |
+| <img src="screenshots/1.png" width="200"> | <img src="screenshots/2.png" width="200"> | <img src="screenshots/3.png" width="200"> |
 
-| Drawer |
-|---|
-| ![Drawer](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Pro%20Max%20-%202025-09-28%20at%2023.08.57.png) |
+### Note Management
+
+| Edit Existing Note | Search Functionality | Note Categories |
+|---|---|---|
+| <img src="screenshots/4.png" width="200"> | <img src="screenshots/5.png" width="200"> | <img src="screenshots/6.png" width="200"> |
+
+### Additional Features
+
+| Navigation Drawer | App Settings |
+|---|---|
+| <img src="screenshots/7.png" width="200"> | <img src="screenshots/8.png" width="200"> |
+
 
 ## Getting Started
 
